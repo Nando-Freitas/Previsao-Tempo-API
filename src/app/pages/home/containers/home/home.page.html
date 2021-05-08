@@ -1,0 +1,36 @@
+<div class="container-fluid">
+
+  <div class="search-container">
+
+    <div class="form-group">
+      <label>Pesquisar</label>
+      <div>
+        <input class="form-control" [formControl]="searchControl">
+        <button class="btn btn-dark"
+                [disabled]="!searchControl.valid"
+                (click)="doSearch()">Pesquisar</button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Pesquisar com <i>autocomplete</i></label>
+      <pt-cities-typeahead [formControl]="searchControlWithAutocomplete"></pt-cities-typeahead>
+    </div>
+
+  </div>
+
+  <!-- Temos que usar o | async quando trabalhamos com Observables -->
+  <pt-loader *ngIf="loading$ | async"></pt-loader>
+
+  <div *ngIf="!(loading$ | async) && !(error$ | async) && !!cityWeather">
+    <pt-current-weather [cityWeather]="cityWeather"
+                        [isFavorite]="isCurrentFavorite$ | async"
+                        [unit]="unit$ | async"
+                        (toggleBookmark)="onToggleBookmark()"></pt-current-weather>
+  </div>
+
+  <div *ngIf="!(loading$ | async) && error$ | async">
+    <a>Tentar novamente</a>
+  </div>
+
+</div>
